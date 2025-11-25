@@ -1,0 +1,11 @@
+n=int(input('Enter the number: '))
+c=str(n)
+sum=0
+cube=0
+print('The number of digits in',n,'is',len(c))
+for i in range(len(c)):
+    sum+=int(c[i])
+print('The sum of digits of',n,'is',sum)
+for i in range(len(c)):
+    cube+=(int(c[i]))**3
+print('The sum of cube of the digits of',n,'is',cube)
