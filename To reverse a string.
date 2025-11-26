@@ -1,0 +1,5 @@
+n=input('Enter the name: ')
+r=''
+for i in n:
+    r=i+r
+print(r)
