@@ -1,0 +1,14 @@
+n=int(input('Enter the number: '))
+g=n
+count=0
+sum=0
+a=''
+while n!=0:
+    r=n%10
+    count+=1
+    sum+=r
+    a=a+str(r)
+    n=n//10
+print('The number of digits in',g,'is',count)
+print('The sum of digits in',g,'is',sum)
+print('The reverse of',g,'is',a)
