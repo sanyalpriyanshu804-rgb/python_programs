@@ -1,0 +1,14 @@
+def fact(n):
+    if n==1 or n==0:
+        return 1
+    else:
+        return n*(fact(n-1))
+
+while True:
+    n=input('Enter the number/exit: ')
+    if n=='exit':
+        print('Thank you for using our program ;)')
+        break
+    else:
+        n=int(n)
+        print('The factorial of',n,'is',fact(n))
