@@ -1,0 +1,31 @@
+class Question:
+    def __init__(self, prompt, answer):
+        self.prompt = prompt
+        self.answer = answer
+test = [
+    'What colour is the sky?\na)white\nb)blue\n\n',
+    'Which is greater?\na)2!\nb)5!\n\n',
+]
+
+questions = [
+    Question(test[0],"b"),
+    Question(test[1],"b"),
+]
+
+def run(questions):
+    score=0
+    wrong=0
+
+    for i in questions:
+        ans=input(i.prompt)
+        if ans == i.answer:
+            score+=1
+        else:
+            wrong+=1
+    
+    print('You answered',str(score),'correct.')
+    print('You answered',str(wrong),'wrong.')
+    print('Your score is',str(score)+'/'+str(len(questions)),'!')
+
+
+run(questions)
