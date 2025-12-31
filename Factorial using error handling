@@ -1,0 +1,18 @@
+def inp():
+    while True:
+        try: 
+            n=int(input('Enter the number: '))
+            if n<0:
+                print("Factorials aren't defined for negative numbers.\nTry again")
+            else:
+                return n
+        except ValueError:
+            print('Enter a valid number!')
+
+def fact(n):
+    result=1
+    for i in range(2,n+1):
+        result*=i
+    return result
+
+print(f"The factorial is {fact(inp())}.")
