@@ -1,0 +1,75 @@
+# modules
+import time
+class Question:
+    def __init__(self,text,ans):
+        self.text = text
+        self.ans = ans
+
+# function no.1
+def welcome():
+    print(
+    '''
+Welcome!
+This is a MCQ type quiz
+You will gain 2 points for every right answer
+and loss 1 for an incorrect one.
+Enjoy using this program! :)
+    '''
+    )
+    start=input('Do you want to start the game? (Y/N) ')
+
+    while start.upper() != "Y":
+        print('?ok',end='')
+        for i in range(3):
+            time.sleep(1)
+            print('.',end='')
+        print()
+        start=input('Do you want to start the game? (Y/N) ')
+    print()
+
+# function no.2
+def run(questions):
+    total=0
+    correct=0
+
+    for question in questions:
+        print(question.text)
+        a=input('Enter the answer: ').upper()
+        
+
+        while a not in 'ABCD':
+            print('Enter a valid option!')
+            a=input('Enter the answer: ').upper()
+        if a == question.ans:
+            total+=2
+            correct+=1
+        else:
+            print()
+            print('Wrong answer!')
+            print(f'The right answer is {question.ans}.')
+            total-=1
+        print()
+    return total, correct
+
+# total material
+prompts = (
+    ('How many bones are in a human body?\nA:198 \nB:206 \nC:208 \nD:320', 'B'),
+    ('Which planet is the hottest in our solar system?\nA:Venus \nB:Mercury \nC:Jupiter \nD:Neptune', 'A'),
+    ('How many elements are in the periodic table?\nA:116 \nB:117 \nC:118 \nD:119', 'C'),
+    ('Which is the most abundant gas in Earth\'s atmosphere?\nA:Oxygen \nB:Carbon Dioxide \nC:Nitrogen \nD:Sulphur', 'C'),
+    ('How many days are in a leap year?\nA:364 \nB:365 \nC:366 \nD:367', 'C'),
+    )
+
+
+questions = []
+
+for i in prompts:
+    questions.append(Question(i[0] , i[1]))
+
+welcome()
+
+total, correct = run(questions)
+percentage=(correct/len(questions))*100
+
+print(f'Your total score is {total}.')
+print(f'You got {percentage:.2f}% correct.')
