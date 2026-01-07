@@ -1,0 +1,107 @@
+import random
+import time
+
+
+def welcome():
+    print(f'''
+This is a Python Number Guessing Game:
+A random number will be generated.
+And you have to guess it :)
+So let's start -
+''')
+
+def Quiz(lowest, highest, answer, MaxGuesses):
+    running = True
+    GuessNo=0
+    OutOfGuesses=False
+    while GuessNo < MaxGuesses:
+        guess = input('\nEnter the guess(Q to quit): ').strip()
+        if guess.upper() == "Q":
+            running = False
+            break
+        else:
+            try:
+                guess = int(guess)
+                if guess > highest or guess < lowest:
+                    print(f'Give an answer between {lowest} and {highest} only.\n')
+                else:
+                    difference=guess-answer
+                    GuessNo+=1
+                    if difference > 5:
+                        print('Too high!\n  ')
+                    elif difference < -5:
+                        print('Too low!\n  ')
+                    elif difference > 0:
+                        print('A little lower!\n  ')
+                    elif difference < 0:
+                        print('A little higher!\n  ')
+                    else:
+                        print('\nCONGRATS! You win!')
+                        break
+            except ValueError:
+                print(f'Enter a "number" between {lowest} and {highest}.')
+    if GuessNo == MaxGuesses:
+        OutOfGuesses=True
+    return running, guess, OutOfGuesses, GuessNo
+
+def Start():
+    while True:
+        running = input('\nDo you want to start this amazing guessing game(Y/N): ').lower()
+        if running not in ('y','n','yes','no'):
+            print('Enter a valid option!')
+        else:
+            if running =="y" or running=='yes':
+                return True
+            else:
+                return False
+
+
+def difficulty():
+    while True:
+        try:
+            level=int(input('Enter the level you want(1 to 5): '))
+            if level > 5 or level < 1:
+                print('Enter the level under 1 to 5. ')
+            else:
+                print(f'The range of number will be from 1 to{level*50}\n')
+                return level
+        except ValueError:
+            print('Enter a "number" between 1 and 5.')
+
+welcome()
+
+while True:
+    
+    if Start():
+        level=difficulty()
+        highest = level*50
+        MaxGuesses = 7
+        lowest = 1
+        answer = random.randint(lowest, highest)
+
+        running, guess, OutOfGuesses, GuessNo = Quiz(lowest, highest, answer, MaxGuesses)
+
+        if not running:
+            print('\nwait',end="")
+            for i in range(3):
+                time.sleep(1)
+                print('.',end='')
+            print()
+            print('You decided to quit.\nHave a nice day!\n')
+        elif OutOfGuesses:
+            print('\nOh',end="")
+            for i in range(3):
+                time.sleep(1)
+                print('.',end='')
+            print()
+            print('You lose!\nOut of guesses :(\n')
+        else:
+            print(f'You still had {MaxGuesses-GuessNo} chances left.')
+    else:
+        print('\nwait',end="")
+        for i in range(3):
+            time.sleep(1)
+            print('.',end='')
+        print()
+        print('\nThanks for visiting this program.\nHave a nice day :)')
+        break
