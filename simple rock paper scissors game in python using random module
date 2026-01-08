@@ -1,0 +1,75 @@
+import random
+
+options=['rock','paper','scissors']
+chance=0
+wins=0
+
+def Calculate(computer_choice, player_choice):
+    c_pos, p_pos=options.index(computer_choice), options.index(player_choice)
+    if c_pos==p_pos:
+        return 'It\'s a Tie'
+    elif c_pos==(p_pos+1) or c_pos==(p_pos-2):
+        return 'You Lose'
+    elif (c_pos)==(p_pos-1) or c_pos==(p_pos+2):
+        return 'You Win'
+
+def UserInput():
+    while True:
+        player_choice=input('Enter your choice: ').lower().strip()
+        if player_choice in options:
+            break
+        else:
+            print('Enter a valid choice!\n ')
+    return player_choice
+
+def Start(text):
+    while True:
+        start = input(text).strip().lower()
+        if start in ('y','yes'):
+            return True
+        elif start in ('no','n'):
+            return False
+        else:
+            print('Enter a valid input')
+
+def Welcome():
+    print('''
+This a rock, paper, scissors game in Python!
+Which you can play with the Computer.
+First you will be asked to enter your choice.
+Then Computer will make it's.
+And the result will be calculated accordingly.
+A match consists of 3 rounds and at the end you will be asked to start another match.
+I hope you get it and have fun!
+''')
+
+Welcome()
+
+if Start('Do you want to start the game? (Y/N): '):
+    next_round=True
+    while next_round:
+        while chance<3:
+            player_choice=UserInput()
+            computer_choice=random.choice(options)
+            print('The computer chose',computer_choice)
+            result=Calculate(computer_choice, player_choice)
+            if result!='It\'s a Tie':
+                chance+=1
+                if result=='You Win':
+                    wins+=1
+            print(result)
+            print()
+        print(f'Yon got {wins} times out of 3.')
+        if wins >= 2:
+            print('Therefore You Won.\n ')
+        else:
+            print('Therefore you lost.\n ')
+        next_round=Start('Do you want to play another round?(Y/N): ')
+        if next_round:
+            chance=0
+            wins=0
+        else:
+            break
+    print('Thanks for using this program.\nHave a nice day :)')
+else:
+    print('You decided to quit.\nHave a nice day :)')
