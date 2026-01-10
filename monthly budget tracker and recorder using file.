@@ -1,0 +1,72 @@
+
+def user_input(text):
+    while True:
+        try:
+            a=float(input(text))
+            break
+        except ValueError:
+            print('Invalid input!\nTry again.')
+            print()
+    return a
+
+def ask_retry():
+    while True:
+        k=input('Do you want to add another category? (Y/N): ').lower()
+        if k in ['y', 'n', 'yes', 'no']:
+            if k in ['y', 'yes']:
+                return True
+            return False
+        else:
+            print('Enter a valid response.')
+            print()
+
+def summary(income, total_expense, kharcha):
+    print(f'''
+    --------------SUMMARY--------------
+    Your income this month {income:>10.2f}.
+    Your total expenses    {total_expense:>10.2f}.
+    Your savings           {(income - total_expense):>10.2f}.
+    
+    ::This is your expense on each category::
+    ''')
+    for c, a in kharcha.items():
+        print(f"    {c.capitalize():-<22}{a:->12.2f}")
+    print('    X----------------------------------X')
+
+def get_category():
+    while True:
+        c=input('Enter the category: ').strip().lower()
+        if bool(c):
+            return c
+        else:
+            print('Enter a reasonable catagory ;)')
+            print()
+
+def expense():
+    retry=True
+    kharcha={}
+    while retry:
+        category=get_category()
+        expense=user_input('Enter your expense here Sir: ')
+        if category in kharcha:
+            kharcha[category]+=expense
+        else:
+            kharcha[category]=expense
+        retry=ask_retry()
+    return (kharcha)
+
+print('Welcome to your budget tracker!!')
+print()
+date=input('Enter the date : ')
+income=user_input('Enter your income of this month: ')
+kharcha = expense()
+total_expense=sum(kharcha.values())
+summary(income, total_expense, kharcha)
+
+file=open(r"C:\Users\Home\Desktop\monthly_budget.txt",'a')
+file.write(f'\n\n{date}')
+file.write(f'\nIncome: {income}\nTotal expense: {total_expense}')
+for c, a in kharcha.items():
+        file.write(f"\n{c.capitalize():-<22}{a:->12.2f}")
+file.write('\nX--------------------------------X')
+file.close()
