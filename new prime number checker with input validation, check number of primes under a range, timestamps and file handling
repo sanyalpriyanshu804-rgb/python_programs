@@ -32,7 +32,7 @@ def is_prime(n):
             prime=False
             factors.add(i)
             factors.add(int(n/i))
-    return prime, list(factors)
+    return prime, sorted(list(factors))
 
 def choose_option():
     while True:
@@ -60,6 +60,11 @@ def start_stop():
             print('Starting point can\'t be lesser than stoping point!')
             print()
 
+def sorting(list):
+    sorted=[]
+    for i in list:
+        sorted.append(str(i))
+    return sorted
 
 print('''
 This is a prime number checker.
@@ -70,7 +75,7 @@ entry_no=input('Enter the entry number of this session: ')
 with open(r"C:\Users\Home\Desktop\monthly_budget.txt",'a') as file:
     file.write(f'\n')
     file.write("*"*20)
-    file.write(f"\n{entry_no}")
+    file.write(f"\nEntry no. {entry_no}")
     file.write(f"\nTime: {datetime.now()}")
     count=0
 
@@ -81,7 +86,7 @@ with open(r"C:\Users\Home\Desktop\monthly_budget.txt",'a') as file:
             if num==2:
                 print(f'✅{num} is a prime number.')
                 file.write(f'\n{num} is a prime number.')
-            elif num==1 or num==0:
+            elif num==1:
                 print(f'❌{num} is not a prime number.')
                 file.write(f'\n{num} is not a prime number.')
             elif num==0:
@@ -97,23 +102,26 @@ with open(r"C:\Users\Home\Desktop\monthly_budget.txt",'a') as file:
                     print(f'❌{num} is not a prime number.')
                     file.write(f'\n{num} is not a prime number.')
 
-                    print('Because it has factors:- ',end=' ')
+                    print('Because it has factors:- ')
                     file.write('\nBecause it has factors:- ')
-
-                    for i in sorted(factors):
-                        print(i,end=", ")
-                        file.write(str(i)+', ')
+                    sort_factors=[]
+                    print(", ".join(sorting(factors)))
+                    file.write(", ".join(sorting(factors)))
                     print()
                     print()
         else:
             start, stop = start_stop()
             print(f'The prime numbers between {start} and {stop} are:')
             file.write(f'\nThe prime numbers between {start} and {stop} are:\n')
+            primes=[]
             for i in range(start, stop+1):
                 prime, factors= is_prime(i)
                 if prime:
-                    print(i,end=', ')
-                    file.write(str(i)+', ')
+                    primes.append(str(i))
+            print(", ".join(primes))
+            print(f'There are {len(primes)} prime numbers between {start} and {stop}.')
+            file.write('\n'+", ".join(primes))
+            file.write(f'There are {len(primes)} prime numbers between {start} and {stop}.')
             print()
             print()
         count+=1
@@ -122,6 +130,6 @@ with open(r"C:\Users\Home\Desktop\monthly_budget.txt",'a') as file:
         else:
             print('\nContinuing program...')
             print()
-    print(f'Thanks for using this program!\nHave a nice day :)\nYou checked {count} numbers in this session')
+    print(f'Thanks for using this program!\nHave a nice day :)')
     file.write(f'\nYou used this program {count} times in this session')
     file.write(f'\n'+'*'*20)
