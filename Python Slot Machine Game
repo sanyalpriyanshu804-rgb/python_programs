@@ -1,0 +1,80 @@
+import random
+
+def y_n():
+    while True:
+        a=input('Enter do you want to play again?(Y/N): ').lower()
+        if a in ['y', 'yes']:
+            return True
+        elif a in ['n', 'no']:
+            return False
+        else:
+            print('Enter a valid option!!')
+
+def get_payout(row, bid):
+    if row[0]==row[1]==row[2]=='🍩':
+        return bid*50
+    elif row[0]==row[1]==row[2]:
+        return bid*10
+    elif row[0]==row[1] or row[0]==row[2] or row[1]==row[2]:
+        return bid*5
+    else:
+        return 0
+
+def enter_bid(balance):
+    while True:
+        try:
+            a=int(input('Enter your bid: '))
+            if a>balance:
+                print('You can\'t bid higher than your balance!')
+            elif a<=0:
+                print('You can\'t bid 0 or less than 0 rupees.')
+            else:
+                return a
+        except ValueError:
+            print('Enter a valid bid!')
+
+def spin_row():
+    symbols=['🍕','🍔','🍗','🍘','🍩']
+    row=[random.choice(symbols) for i in range(3)]
+    return row
+
+def welcome():
+    print('''This is a gambling program!
+You have ₹100 to start with.
+A random set of three symbols among these will be generated 
+| 🍕 | 🍔 | 🍗 | 🍘 | 🍩 |
+If two of symbols are same your bid becomes 5X, and
+If all three of symbols are same your bid becomes 10X, and
+If all three symbols become '' Then you hit the jackpot!!
+----------------Your bid will be 50X------------------
+Have fun!!!
+''')
+
+def main():
+    welcome()
+    balance=100
+    while True:
+        print(f'Your current balance ₹{balance:,.2f}')
+        bid = enter_bid(balance)
+        balance-=bid
+        row=spin_row()
+        print(' | '.join(row))
+        payout=get_payout(row, bid)
+        if payout>0:
+            print(f'You won ₹{payout}')
+        else:
+            print('You lose!\n')
+        balance+=payout
+        if balance<=0:
+            print('You ran out of money! GAME OVER!')
+            break
+        if not y_n():
+            break
+        else:
+            print()
+            continue
+    print(f'You are left with ₹{balance}')
+    print(f'You won ₹{balance-100}' if balance>=100 else f'You lose ₹{100-balance}')
+
+if __name__=='__main__':
+    main()
