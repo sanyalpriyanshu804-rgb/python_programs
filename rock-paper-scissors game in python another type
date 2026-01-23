@@ -1,0 +1,94 @@
+import random
+
+choices = ['Rock', 'Scissors', 'Paper']
+
+def user_choice(choices):
+    while True:
+        a = input('Enter your choice: ').strip().capitalize()
+        if a in choices:
+            return a 
+        else:
+            print('Enter a valid choice!\n')
+
+def welcome():
+    print('''
+This is a rock-paper-scissors game in python!
+You can choose the no. of rounds per match.
+And the number of matches won are stored and showed at the end!
+''')
+
+def is_continue(text):
+    while True:
+        a = input(text).strip().lower()
+        if a in ['y', 'yes']:
+            return True
+        elif a in ['n', 'no']:
+            return False
+        else:
+            print('Enter a valid choice!!!\n')
+
+def no_of_rounds():
+    while True:
+        a = input('Enter the number of rounds: ')
+        if a.isdigit():
+            a = int(a)
+            if a%2 == 0:
+                print('The number of rounds can\'t be even \n(As the winner can\'t be calculated)\n')
+            else:
+                return a
+        else:
+            print('Enter a valid number of rounds!\n')
+
+matches_played = 0
+player_won_matches = 0
+computer_won_matches = 0
+
+welcome()
+start = is_continue('Do you want to start the game?(Y/N): ')
+while start:
+    matches_played+=1
+    player_score = 0
+    computer_score = 0
+    rounds_played = 0
+    rounds = no_of_rounds()
+    while rounds_played < rounds:
+        print()
+        player = user_choice(choices)
+        computer = random.choice(choices)
+        print(f'\nYou choose {player} | Computer choose {computer}')
+        win_map ={
+            'Rock':'Scissors',
+            'Scissors':'Paper',
+            'Paper':'Rock'
+        }
+        if player == computer:
+            print('TIE!\n')
+        elif win_map[player] == computer:
+            print('You won! :)\n')
+            player_score+=1
+        else:
+            print('You lose! :(\n')
+            computer_score+=1
+    if computer_score > player_score:
+        print('Compute won this match!\n')
+        computer_won_matches+=1
+    else:
+        print('You won this match!\n')
+        player_won_matches+=1
+    
+    if not is_continue('Do you want to play another match?(Y/N): '):
+        break
+print(f'\nTotal matches played {matches_played}')
+print('Out of which-')
+print(f'Matches won by you: {player_won_matches}')
+print(f'Matches won by computer: {computer_won_matches}')
+print('Therefore...')
+print()
+if computer_won_matches == player_won_matches == 0:
+    print('No matches played :(')
+elif computer_won_matches == player_won_matches:
+    print('It\'s a tie')
+elif computer_won_matches > player_won_matches:
+    print('Compute won this game!\n')
+else:
+    print('You won this game!\n')
