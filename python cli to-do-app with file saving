@@ -1,0 +1,177 @@
+import string
+def welcome():
+    print('''
+This is a python (cli) to-do-list app!
+You can add, delete and view tasks 
+As the tasks gets stored in a file 
+your tasks wount get lost on closing the program!
+Try it and have fun!
+''')
+
+def menu(options, is_quit):
+    print('Choose-')
+    for i, j in options.items():
+        print(f"{i}. {j}")
+    extra = 'q for quit'
+    while True:
+        a = input(f'Enter your choice(1-{len(options)} {extra if is_quit else ""}): ')
+        if is_quit and (a.strip().lower() == 'q' or a.strip().lower() == 'quit'):
+            return None
+        if a in options.keys():
+            return a
+        else:
+            print('Enter a valid choice!\n')
+
+def yes_no(text):
+    while True:
+        a = input(text+'?(Y/N): ').strip().lower()
+        if a in ['y', 'yes']:
+            return True
+        elif a in ['n', 'no']:
+            return False
+        else:
+            print('Enter a valid choice!\nTry again.\n')
+
+def user_choice():
+    options={'1':'View tasks','2':'Add tasks','3':'Delete tasks','4':'Update tasks'}
+    return int(menu(options, True))
+
+def add_progress():
+    print('Add progress: ')
+    options={'1':'Not started','2':'Ongoing','3':'Completed','4':'Bookmark'}
+    result = menu(options,False)
+    return options[result]
+
+def add_importance():
+    options={'1':'High','2':'Medium','3':'Low'}
+    result = menu(options, False)
+    return options[result]
+
+def load_tasks():
+    with open(r'high_score.txt','r') as file:
+        a = file.readlines()
+        tasks=[]
+        for i in range(0,len(a),4):
+            task=dict()
+            task['Task'] = a[i]
+            task['Progress'] = a[i+1]
+            task['Importance'] = a[i+2]
+            task['Due date'] = a[i+3]
+            tasks.append(task)
+        return tasks
+
+def add_date():
+    while True:
+        date=input('Enter the due date (DD/MM/YY): ').strip()
+        if len(date) != 8:
+            print('Enter the date in the right format!\n')
+            continue
+        num=date[:2]+date[3:5]+date[6:]
+        if num.isdigit() and (date[2]==date[5]) and date[2] in string.punctuation :
+            return date
+        else:
+            print('Enter a valid due date!\n')
+
+def view_tasks(tasks):
+    print()
+    if len(tasks)<1:
+        print('No tasks right now. :(')
+        return
+    for i in range(len(tasks)):
+        print(f'Task no. {i+1}')
+        for title, data in tasks[i].items():
+            print(f'{title}: {data}')
+        print()
+
+def to_update():
+    print('What do you want to update: ')
+    options={'1':'Task name','2':'Progress','3':'Importance','4':'Date'}
+    return menu(options, True)
+
+def is_task(tasks,text):
+    while True:
+        a = input(f'Enter the task no. of the task to {text}: ')
+        if a.isdigit():
+            a=int(a)
+            if a in range(1, len(tasks)+1):
+                return a
+            else:
+                print('Enter a valid no.!\n')
+        else:
+            print('Enter a valid task no.!\n')
+
+
+def update_task(tasks):
+    view_tasks(tasks)
+    a = is_task(tasks,'update') - 1
+    print(tasks[a],'\n')
+    while True:
+        b = to_update()
+        if b == None:
+            print('Nothing changed.')
+            break
+        b=int(b)
+        if b == 1:
+            while True:
+                c = input('Enter the name of the task: ')
+                if not bool(c):
+                    print('The task name can\'t be empty!\n')
+                else:
+                    break
+            tasks[a]['Task'] = c
+        elif b==2:
+            c = add_progress()
+            tasks[a]['Progress'] = c
+        elif b==3:
+            c = add_importance()
+            tasks[a]['Importance'] = c
+        elif b ==4:
+            c = add_date()
+            tasks[a]['Due date'] = c
+        print('Update complete!')
+        print(tasks[a],'\n')
+        if not yes_no('Do you want to update anything else in this task'):
+            break
+
+# 1 view
+# 2 add
+# 3 delete
+# 4 update
+tasks=load_tasks()
+welcome()
+start = yes_no('Do you want to start this program')
+while start:
+    print()
+    choice = user_choice()
+    if choice == 1:
+        view_tasks(tasks)
+    elif choice == 2:
+        print()
+        while True:
+            name = input('Enter the name of the task: ')
+            if not bool(name):
+                print('The task name can\'t be empty!\n')
+            else:
+                break
+        progress=add_progress()
+        importance=add_importance()
+        date=add_date()
+        b = {'Task':name, 'Progress':progress, 'Importance':importance, 'Due date':date}
+        tasks.append(b)
+        print('The task has been added!\n')
+    elif choice == 3:
+        view_tasks(tasks)
+        a = is_task(tasks, 'delete') - 1
+        tasks.pop(a)
+        print('The task has been removed!\n')
+    else:
+        update_task(tasks)
+    if not yes_no('Do you want to use this program again'):
+        break
+print('Thank\'s for visiting this program :)')
+
+
+with open(r'high_score.txt','w') as file:
+    for i in tasks:
+        for j in i.values():
+            file.write(j+'\n')
